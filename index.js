@@ -1,4 +1,6 @@
 const URL_PEXELS = "https://api.pexels.com/v1/search?query=";
+let randomViewImages = Math.floor(Math.random() * 10);
+let page = "&page=" + randomViewImages;
 let currentQuery = "sea";
 const btnCartoon = document.getElementById("btnCartoon");
 const btnSunset = document.getElementById("btnSunset");
@@ -23,7 +25,7 @@ btnSunset.addEventListener("click", () => {
 });
 
 const pexelsOnLoad = () => {
-  fetch(URL_PEXELS + currentQuery, {
+  fetch(URL_PEXELS + currentQuery + page, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -44,7 +46,7 @@ const pexelsOnLoad = () => {
         let imgCard = document.createElement("img");
         imgCard.src = photo.src.medium;
         imgCard.alt = photo.alt;
-        imgCard.classList.add("bd-placeholder-img", "card-img-top");
+        imgCard.classList.add("card-img-top", "object-fit-cover", "w-100");
         imgCard.onclick = () => {
           window.location.href = "details.html?id=" + photo.id;
         };
