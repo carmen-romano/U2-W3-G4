@@ -1,10 +1,31 @@
 const URL_PEXELS = "https://api.pexels.com/v1/search?query=";
+const URL_PEXELS_MODAL = "https://api.pexels.com/v1/photos/";
 let randomViewImages = Math.floor(Math.random() * 10);
 let page = "&page=" + randomViewImages;
 let currentQuery = "sea";
 const btnCartoon = document.getElementById("btnCartoon");
 const btnSunset = document.getElementById("btnSunset");
 const searchImg = document.getElementById("searchImg");
+
+const loadModalDetails = (photoId) => {
+  fetch(URL_PEXELS_MODAL + photoId, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "wybsMdEQfaih71lVvIIkMdVmmVZ9w5XD5L46FuljxXMPZIqsiNNXxem3",
+    },
+  })
+    .then((response) => response.json())
+    .then((modalDate) => {
+      let staticBackdropLabel = document.getElementById("staticBackdropLabel");
+      staticBackdropLabel.innerText = "Photographer: " + modalDate.photographer;
+      let imgModal = document.getElementById("imgModal");
+      imgModal.src = modalDate.src.portrait;
+    })
+    .catch((error) => {
+      console.error("Errore:", error);
+    });
+};
 
 searchImg.addEventListener("input", () => {
   const searchValue = searchImg.value;
@@ -18,7 +39,6 @@ btnCartoon.addEventListener("click", () => {
   currentQuery = "cartoon";
   pexelsOnLoad();
 });
-
 btnSunset.addEventListener("click", () => {
   currentQuery = "sunset";
   pexelsOnLoad();
@@ -44,7 +64,7 @@ const pexelsOnLoad = () => {
         card.classList.add("card", "mb-4", "shadow-sm");
 
         let imgCard = document.createElement("img");
-        imgCard.src = photo.src.medium;
+        imgCard.src = photo.src.portrait;
         imgCard.alt = photo.alt;
         imgCard.classList.add("card-img-top", "object-fit-cover", "w-100");
         imgCard.onclick = () => {
@@ -69,14 +89,31 @@ const pexelsOnLoad = () => {
         divBtnGroup.classList.add("btn-group");
 
         let btnView = document.createElement("button");
-        btnView.classList.add("btn", "btn-sm", "btn-outline-secondary");
+        btnView.classList.add(
+          "btn",
+          "btn-sm",
+          "btn-outline-secondary",
+          "btn-view"
+        );
+        btnView.setAttribute("data-bs-toggle", "modal");
+        btnView.setAttribute("data-bs-target", "#staticBackdrop");
+        btnView.setAttribute("data-attribute", `${photo.id}`);
         btnView.textContent = "View";
+        ///CREAZIONE MODALE PER IMG
+
+        const btnViewList = document.querySelectorAll(".btn-view");
+        btnViewList.forEach((btnView) => {
+          btnView.addEventListener("click", () => {
+            const photoId = btnView.getAttribute("data-attribute");
+            console.log("ID dell'immagine:", photoId);
+            loadModalDetails(photoId);
+          });
+        });
 
         let btnHide = document.createElement("button");
         btnHide.classList.add("btn", "btn-sm", "btn-outline-secondary");
         btnHide.textContent = "Hide";
         btnHide.addEventListener("click", () => {
-          console.log("Elemento scartato: ", photo.title);
           card.parentNode.remove();
         });
 

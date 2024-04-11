@@ -12,6 +12,9 @@ const details = () => {
   })
     .then((response) => response.json())
     .then((detailsData) => {
+      let section = document.getElementById("sectionText");
+      section.style.backgroundImage = `linear-gradient(to top, transparent, ${detailsData.avg_color})`;
+
       let h1Title = document.getElementById("h1Title");
       h1Title.textContent = detailsData.alt;
       let pDetails = document.getElementById("pDetails");
@@ -19,10 +22,10 @@ const details = () => {
 
       let container = document.getElementById("container");
       let col = document.createElement("div");
-      col.classList.add("card", "mb-3", "m-5");
+      col.classList.add("card", "mb-3");
 
       let imgCard = document.createElement("img");
-      imgCard.src = detailsData.src.medium;
+      imgCard.src = detailsData.src.landscape;
       imgCard.alt = detailsData.alt;
       imgCard.classList.add("card-img-top");
 
