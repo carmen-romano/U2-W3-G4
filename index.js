@@ -40,14 +40,14 @@ const pexelsOnLoad = () => {
 
         let card = document.createElement("div");
         card.classList.add("card", "mb-4", "shadow-sm");
-        card.onclick = () => {
-          window.location.href = "details.html?id=" + photo.id;
-        };
 
         let imgCard = document.createElement("img");
         imgCard.src = photo.src.medium;
         imgCard.alt = photo.alt;
         imgCard.classList.add("bd-placeholder-img", "card-img-top");
+        imgCard.onclick = () => {
+          window.location.href = "details.html?id=" + photo.id;
+        };
 
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
